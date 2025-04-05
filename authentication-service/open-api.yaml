@@ -1,0 +1,574 @@
+openapi: 3.1.0
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+  - url: http://localhost:8081
+    description: Generated server url
+paths:
+  /authentication/user-group/{userGroupId}:
+    get:
+      tags:
+        - user-group-api
+      summary: Find user group by ID
+      description: The endpoint lists the user group by ID
+      operationId: findUserGroupById
+      parameters:
+        - name: userGroupId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: User groups
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserGroupResponse'
+        '401':
+          description: The user is not authenticated
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserGroupResponse'
+    put:
+      tags:
+        - user-group-api
+      summary: Update an existing user group
+      description: The endpoint updates an existing user groups
+      operationId: updateUserGroup
+      parameters:
+        - name: userGroupId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserGroupRequest'
+        required: true
+      responses:
+        '200':
+          description: User group updated
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserGroupResponse'
+        '401':
+          description: The user is not authenticated
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserGroupResponse'
+  /authentication/user/{userId}/user-group:
+    post:
+      tags:
+        - user-api
+      summary: Link user account to a list of user groups
+      description: The endpoint links an user account to the list of user groups
+      operationId: linkUserAccountToUserGroups
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LinkUserAccountToUserGroupsRequest'
+        required: true
+      responses:
+        '200':
+          description: User account linked to the user groups
+        '401':
+          description: The user is not authenticated
+    delete:
+      tags:
+        - user-api
+      summary: Unlink user account to a list of user groups
+      description: The endpoint unlinks the user account to the list of user groups
+      operationId: unlinkUserAccountToUserGroups
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LinkUserAccountToUserGroupsRequest'
+        required: true
+      responses:
+        '200':
+          description: User account removed from user groups
+        '401':
+          description: The user is not authenticated
+  /authentication/user/invite:
+    post:
+      tags:
+        - user-api
+      summary: Invite new user
+      description: >-
+        The endpoint for creating new user accounts to the company of the
+        authenticated user
+      operationId: inviteNewUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InviteRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+        '401':
+          description: The user is not authenticated
+          content:
+            '*/*':
+              schema:
+                type: string
+  /authentication/user/activation:
+    post:
+      tags:
+        - user-api
+      summary: Activate user account
+      description: The endpoint activates the user account
+      operationId: activateUserAccount
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActivationRequest'
+        required: true
+      responses:
+        '200':
+          description: User account has been activated
+  /authentication/user-group:
+    get:
+      tags:
+        - user-group-api
+      summary: List all user groups
+      description: The endpoint lists all existing user groups
+      operationId: findAll
+      responses:
+        '200':
+          description: User groups
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserGroupResponse'
+        '401':
+          description: The user is not authenticated
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserGroupResponse'
+    post:
+      tags:
+        - user-group-api
+      summary: Create new user group
+      description: The endpoint creates a new user group
+      operationId: createUserGroup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserGroupRequest'
+        required: true
+      responses:
+        '200':
+          description: User group created
+        '401':
+          description: The user is not authenticated
+  /authentication/user-group/{userGroupId}/rule:
+    get:
+      tags:
+        - user-group-api
+      summary: List the user group rules
+      description: The endpoint lists the rules of the user group
+      operationId: listUserGroupRules
+      parameters:
+        - name: userGroupId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: User group rules
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserGroupRulesResponse'
+        '401':
+          description: The user is not authenticated
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserGroupRulesResponse'
+    post:
+      tags:
+        - user-group-api
+      summary: Link the user group to rules
+      description: The endpoint links an user group to the list of rules
+      operationId: linkRuleUserGroup
+      parameters:
+        - name: userGroupId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LinkUserGroupToRulesRequest'
+        required: true
+      responses:
+        '200':
+          description: User group linked to the rules
+        '401':
+          description: The user is not authenticated
+    delete:
+      tags:
+        - user-group-api
+      summary: Unlink the user group to rules
+      description: The endpoint unlinks an user group to the list of rules
+      operationId: unlinkRuleUserGroup
+      parameters:
+        - name: userGroupId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LinkUserGroupToRulesRequest'
+        required: true
+      responses:
+        '200':
+          description: User group unlinked to the rules
+        '401':
+          description: The user is not authenticated
+  /authentication/register:
+    post:
+      tags:
+        - user-api
+      operationId: register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistrationRequest'
+        required: true
+      responses:
+        '200':
+          description: User has been created
+        '400':
+          description: Bad request
+  /authentication/login:
+    post:
+      tags:
+        - user-api
+      summary: Authentication
+      description: The endpoint for user authentication
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Invalid username or password provided
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+  /health-check/database:
+    get:
+      tags:
+        - health-check-api
+      operationId: databaseCheck
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+  /health-check/api:
+    get:
+      tags:
+        - health-check-api
+      operationId: apiCheck
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+  /authentication/user-data:
+    get:
+      tags:
+        - user-api
+      summary: User account data
+      description: The endpoint for retrieving user account data
+      operationId: getUserAccountData
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/GetUserAccountResponse'
+        '401':
+          description: The user is not authenticated
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/GetUserAccountResponse'
+  /authentication/rule:
+    get:
+      tags:
+        - rules-api
+      summary: List all rules
+      description: The endpoint lists all existing rules
+      operationId: findAll_1
+      responses:
+        '200':
+          description: Rules
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RuleResponse'
+        '401':
+          description: The user is not authenticated
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RuleResponse'
+  /authentication/company/user:
+    get:
+      tags:
+        - user-api
+      operationId: getUserAccountsFromCurrentCompany
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/GetCompanyUserAccountsResponse'
+components:
+  schemas:
+    UserGroupRequest:
+      type: object
+      description: The request body
+      properties:
+        name:
+          type: string
+          description: The name of the user group
+          minLength: 1
+        description:
+          type: string
+          description: The description of the user group
+          minLength: 1
+    UserGroupResponse:
+      type: object
+      properties:
+        userGroupId:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+    LinkUserAccountToUserGroupsRequest:
+      type: object
+      description: The request body
+      properties:
+        userGroupIds:
+          type: array
+          description: The list of the IDs of the user groups
+          items:
+            type: string
+            format: uuid
+          uniqueItems: true
+      required:
+        - userGroupIds
+    InviteRequest:
+      type: object
+      description: The request body
+      properties:
+        name:
+          type: string
+          description: The name of the invited user
+          minLength: 1
+        email:
+          type: string
+          description: The email of the user invited user
+          minLength: 1
+    ActivationRequest:
+      type: object
+      description: The request body
+      properties:
+        password:
+          type: string
+          description: The new password of the user
+          minLength: 1
+        confirmPassword:
+          type: string
+          description: The confirm password of the user
+          minLength: 1
+        activationToken:
+          type: string
+          description: 'The activation token '
+          minLength: 1
+    LinkUserGroupToRulesRequest:
+      type: object
+      description: The request body
+      properties:
+        ruleIds:
+          type: array
+          description: The list of the IDs of the rules
+          items:
+            type: string
+            format: uuid
+          uniqueItems: true
+      required:
+        - ruleIds
+    RegistrationRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the user
+          minLength: 1
+        email:
+          type: string
+          description: The email of the user
+          minLength: 1
+        password:
+          type: string
+          description: The password of the user
+          minLength: 1
+        confirmPassword:
+          type: string
+          description: The confirm password that should match with the password
+          minLength: 1
+        companyName:
+          type: string
+          description: The name of the company
+          minLength: 1
+        currencyId:
+          type: string
+          format: uuid
+          description: The default currency of the company
+        country:
+          type: string
+          description: The country of the user
+    LoginRequest:
+      type: object
+      description: The request body
+      properties:
+        username:
+          type: string
+          description: The username of the user in order to authenticate
+          minLength: 1
+        password:
+          type: string
+          description: The password of the user in order to authenticate
+          minLength: 1
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: The generated token
+    RuleResponse:
+      type: object
+      properties:
+        ruleId:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+    UserGroupRulesResponse:
+      type: object
+      properties:
+        usergroup:
+          $ref: '#/components/schemas/UserGroupResponse'
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/RuleResponse'
+    GetUserAccountResponse:
+      type: object
+      properties:
+        userAccountId:
+          type: string
+          format: uuid
+          description: The user account ID
+        name:
+          type: string
+          description: The name of the user account ID
+    GetCompanyUserAccountResponse:
+      type: object
+      properties:
+        userAccountId:
+          type: string
+          format: uuid
+        name:
+          type: string
+        email:
+          type: string
+        userGroups:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserGroupResponse'
+    GetCompanyUserAccountsResponse:
+      type: object
+      properties:
+        userAccounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetCompanyUserAccountResponse'
