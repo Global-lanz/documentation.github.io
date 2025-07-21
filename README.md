@@ -4,10 +4,10 @@ If this repository is not up to date, or you feel that it is missing something, 
 
 You need to run all services via docker-compose and then access the up to date swagger documentation file, using the example below:
 
-For Authentication Service: http://localhost:8081/v3/api-docs
-For Company Service: http://localhost:8082/v3/api-docs
-For Customer Service: http://localhost:8083/v3/api-docs
-For Finance Service: http://localhost:8085/v3/api-docs
+ - Authentication Service: http://localhost:8081/v3/api-docs
+ - Company Service: http://localhost:8082/v3/api-docs
+ - Customer Service: http://localhost:8083/v3/api-docs
+ - Finance Service: http://localhost:8085/v3/api-docs
 
 Then you can copy the JSON and follow the steps below.
 
